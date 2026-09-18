@@ -36,7 +36,3 @@ El proyecto cuenta con:
 - Arquitectura inicial definida.
 
 Actualmente se trabaja en la implementación del prototipo funcional y la validación de los componentes principales.
-
----
-
-## Estructura del repositorio
