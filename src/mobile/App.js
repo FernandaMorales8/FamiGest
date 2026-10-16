@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -15,6 +15,7 @@ import CameraPracticeScreen from './src/screens/CameraPracticeScreen';
 import SignIntroductionScreen from './src/screens/SignIntroductionScreen';
 import GoodJobScreen from './src/screens/GoodJobScreen';
 import { calculateMasteryScore } from './src/services/scoring';
+import { getUserProgress, saveUserProgress, resetUserProgress } from './src/services/api';
 
 // Flujo pedagógico para la Lección 1 (Vocales: Señas 'A' y 'E'):
 // Regla: Nunca evaluar una seña sin haberla introducido primero.
@@ -59,6 +60,15 @@ export default function App() {
     lesson3: 0,
   });
 
+  // Cargar el progreso persistente desde la API al iniciar la aplicación
+  useEffect(() => {
+    getUserProgress().then((saved) => {
+      if (saved) {
+        setUserProgress(saved);
+      }
+    });
+  }, []);
+
   // Navegación de pestañas inferiores
   const handleTabChange = (tabName) => {
     if (tabName === 'profile') setCurrentScreen('profile');
@@ -69,7 +79,7 @@ export default function App() {
   // Iniciar lección: configura la cola de ejercicios e introduce la seña
   const handleStartLesson = (lessonId) => {
     setActiveLessonId(lessonId);
-    setSessionQueue([...LESSON_1_FLOW]);
+    setSessionQueue(LESSON_1_FLOW.map((item) => ({ ...item, skipAttempts: 0 })));
     setSessionIndex(0);
     setSkippedQueue([]);
     setErrorsCount(0);
@@ -113,6 +123,9 @@ export default function App() {
       return updated;
     });
 
+    // Persistir el progreso remotamente mediante la API (D-01)
+    saveUserProgress(activeLessonId, finalScore);
+
     // Pantalla de carga transitoria con el spinner oficial antes de mostrar "¡Buen trabajo!"
     setCurrentScreen('lesson_calculating');
   };
@@ -141,7 +154,7 @@ export default function App() {
     const currentEx = sessionQueue[sessionIndex];
     const prevAttempts = currentEx.skipAttempts || 0;
     const currentAttempts = prevAttempts + 1;
-    currentEx.skipAttempts = currentAttempts;
+    const updatedEx = { ...currentEx, skipAttempts: currentAttempts };
 
     let updatedSkipped = [...skippedQueue];
     let newFailedCount = failedExercisesCount;
@@ -153,7 +166,7 @@ export default function App() {
     } else {
       // Primer salto: se añade a la cola de reintentos
       setSkipsCount((prev) => prev + 1);
-      updatedSkipped.push(currentEx);
+      updatedSkipped.push(updatedEx);
       setSkippedQueue(updatedSkipped);
     }
 
@@ -179,6 +192,7 @@ export default function App() {
       lesson3: 0,
     });
     setLastMasteryScore(0);
+    resetUserProgress();
   };
 
   if (!fontsLoaded) {
@@ -190,6 +204,10 @@ export default function App() {
   }
 
   const currentExercise = sessionQueue[sessionIndex];
+  const isMainTab =
+    currentScreen === 'lessons' ||
+    currentScreen === 'profile' ||
+    currentScreen === 'settings';
 
   return (
     <SafeAreaProvider>
@@ -204,20 +222,23 @@ export default function App() {
           <LoadingScreen onLoaded={() => setCurrentScreen('lessons')} />
         )}
 
-        {currentScreen === 'lessons' && (
-          <LessonsScreen
-            onSelectLesson={handleStartLesson}
-            onTabChange={handleTabChange}
-            progress={userProgress}
-          />
-        )}
-
-        {currentScreen === 'profile' && (
-          <ProfileScreen onTabChange={handleTabChange} progress={userProgress} />
-        )}
-
-        {currentScreen === 'settings' && (
-          <SettingsScreen onTabChange={handleTabChange} onResetProgress={handleResetProgress} />
+        {/* Pestañas principales mantenidas en memoria para cambio instantáneo sin tirón */}
+        {isMainTab && (
+          <View style={styles.container}>
+            <View style={{ flex: 1, display: currentScreen === 'lessons' ? 'flex' : 'none' }}>
+              <LessonsScreen
+                onSelectLesson={handleStartLesson}
+                onTabChange={handleTabChange}
+                progress={userProgress}
+              />
+            </View>
+            <View style={{ flex: 1, display: currentScreen === 'profile' ? 'flex' : 'none' }}>
+              <ProfileScreen onTabChange={handleTabChange} progress={userProgress} />
+            </View>
+            <View style={{ flex: 1, display: currentScreen === 'settings' ? 'flex' : 'none' }}>
+              <SettingsScreen onTabChange={handleTabChange} onResetProgress={handleResetProgress} />
+            </View>
+          </View>
         )}
 
         {/* Sesión de Lección Interactiva (Intro -> Quiz -> Cámara -> Reintento de Saltados) */}
@@ -225,6 +246,7 @@ export default function App() {
           <>
             {currentExercise.type === 'intro' && (
               <SignIntroductionScreen
+                key={`${currentExercise.id}_attempt_${currentExercise.skipAttempts || 0}`}
                 letter={currentExercise.letter}
                 onContinue={handleExerciseCorrect}
                 onCancel={() => setCurrentScreen('lessons')}
@@ -233,6 +255,7 @@ export default function App() {
 
             {currentExercise.type === 'multiple_choice' && (
               <ExerciseMultipleChoiceScreen
+                key={`${currentExercise.id}_attempt_${currentExercise.skipAttempts || 0}`}
                 targetLetter={currentExercise.letter}
                 options={currentExercise.options || ['E', 'I', 'O', 'A']}
                 onCorrect={handleExerciseCorrect}
@@ -243,6 +266,7 @@ export default function App() {
 
             {currentExercise.type === 'camera_practice' && (
               <CameraPracticeScreen
+                key={`${currentExercise.id}_attempt_${currentExercise.skipAttempts || 0}`}
                 letter={currentExercise.letter}
                 gestureId={currentExercise.gestureId || 1}
                 onCorrect={handleExerciseCorrect}

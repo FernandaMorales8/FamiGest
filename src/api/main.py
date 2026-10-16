@@ -175,3 +175,29 @@ async def evaluate_gesture_base64(payload: EvaluateBase64Request):
         raise HTTPException(status_code=400, detail=f"Imagen Base64 inválida: {str(e)}")
 
     return _evaluate_gesture_internal(image_rgb, payload.gesture_id)
+
+
+class UpdateProgressRequest(BaseModel):
+    lesson_id: int
+    score: int
+
+
+@app.get("/api/v1/progress")
+def get_progress():
+    """Obtiene el progreso guardado del usuario desde el servidor"""
+    return data_manager.get_user_progress()
+
+
+@app.post("/api/v1/progress")
+def update_progress(payload: UpdateProgressRequest):
+    """Guarda el progreso de una lección conservando la puntuación más alta"""
+    if payload.lesson_id not in (1, 2, 3):
+        raise HTTPException(status_code=400, detail="ID de lección inválido")
+    return data_manager.save_lesson_progress(payload.lesson_id, payload.score)
+
+
+@app.post("/api/v1/progress/reset")
+def reset_progress():
+    """Reinicia el progreso guardado del usuario a cero"""
+    return data_manager.reset_user_progress()
+

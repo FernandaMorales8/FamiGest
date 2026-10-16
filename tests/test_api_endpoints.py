@@ -38,5 +38,29 @@ class TestAPIEndpoints(unittest.TestCase):
         self.assertEqual(gesture["id"], 1)
         self.assertEqual(gesture["word"].lower(), "a")
 
+    def test_user_progress_persistence_and_high_score(self):
+        # 1. Reiniciar progreso
+        res_reset = self.client.post("/api/v1/progress/reset")
+        self.assertEqual(res_reset.status_code, 200)
+        self.assertEqual(res_reset.json()["lesson1"], 0)
+
+        # 2. Guardar calificación del 100% en Lección 1
+        res_save1 = self.client.post("/api/v1/progress", json={"lesson_id": 1, "score": 100})
+        self.assertEqual(res_save1.status_code, 200)
+        self.assertEqual(res_save1.json()["lesson1"], 100)
+        self.assertEqual(res_save1.json()["overall"], 33)
+
+        # 3. Si repite la lección y obtiene menor calificación (75%), conserva el 100%
+        res_save2 = self.client.post("/api/v1/progress", json={"lesson_id": 1, "score": 75})
+        self.assertEqual(res_save2.status_code, 200)
+        self.assertEqual(res_save2.json()["lesson1"], 100)
+
+        # 4. Consultar progreso guardado y luego limpiar
+        res_get = self.client.get("/api/v1/progress")
+        self.assertEqual(res_get.status_code, 200)
+        self.assertEqual(res_get.json()["lesson1"], 100)
+        self.client.post("/api/v1/progress/reset")
+
 if __name__ == "__main__":
     unittest.main()
+

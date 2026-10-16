@@ -40,7 +40,7 @@ export default function SettingsScreen({ onTabChange, onResetProgress }) {
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <FamiGestLogo fontSize={40} />
+          <FamiGestLogo fontSize={42} />
         </View>
 
         {/* Tarjeta de Opciones */}
