@@ -81,3 +81,48 @@ export async function evaluateGesture(gestureId, base64Image) {
     throw error;
   }
 }
+
+export async function getUserProgress() {
+  try {
+    const res = await fetch(`${getBaseUrl()}/api/v1/progress`);
+    if (!res.ok) throw new Error("Error al obtener progreso");
+    return await res.json();
+  } catch (error) {
+    console.warn("No se pudo sincronizar el progreso desde la API:", error);
+    return null;
+  }
+}
+
+export async function saveUserProgress(lessonId, score) {
+  try {
+    const res = await fetch(`${getBaseUrl()}/api/v1/progress`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        lesson_id: lessonId,
+        score: score,
+      }),
+    });
+    if (!res.ok) throw new Error("Error al guardar progreso");
+    return await res.json();
+  } catch (error) {
+    console.warn("No se pudo guardar el progreso en la API:", error);
+    return null;
+  }
+}
+
+export async function resetUserProgress() {
+  try {
+    const res = await fetch(`${getBaseUrl()}/api/v1/progress/reset`, {
+      method: "POST",
+    });
+    if (!res.ok) throw new Error("Error al reiniciar progreso");
+    return await res.json();
+  } catch (error) {
+    console.warn("No se pudo reiniciar el progreso en la API:", error);
+    return null;
+  }
+}
+

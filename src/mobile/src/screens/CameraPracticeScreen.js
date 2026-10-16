@@ -27,6 +27,16 @@ export default function CameraPracticeScreen({
   const cameraRef = useRef(null);
   const isMountedRef = useRef(true);
   const isEvaluatingRef = useRef(false);
+  const onCorrectRef = useRef(onCorrect);
+  onCorrectRef.current = onCorrect;
+
+  // Reiniciar estado interno cada vez que cambia el ejercicio o letra
+  useEffect(() => {
+    setIsCorrect(false);
+    setHandDetected(false);
+    setStatusMessage('Buscando mano en el encuadre...');
+    isEvaluatingRef.current = false;
+  }, [letter, gestureId]);
 
   // Solicitar permiso de cámara automáticamente al entrar
   useEffect(() => {
@@ -49,6 +59,8 @@ export default function CameraPracticeScreen({
   useEffect(() => {
     if (!permission?.granted || isCorrect) return;
 
+    let passTimeoutId = null;
+
     const intervalId = setInterval(async () => {
       if (!cameraRef.current || isEvaluatingRef.current || isCorrect) return;
 
@@ -69,12 +81,14 @@ export default function CameraPracticeScreen({
 
           if (res.passed) {
             // ¡Seña correcta! Borde verde, detener bucle y pasar automáticamente
+            clearInterval(intervalId);
             setIsCorrect(true);
             setHandDetected(true);
             updateStatus('¡Excelente! Seña correcta.');
-            clearInterval(intervalId);
-            setTimeout(() => {
-              if (isMountedRef.current && onCorrect) onCorrect();
+            passTimeoutId = setTimeout(() => {
+              if (isMountedRef.current && onCorrectRef.current) {
+                onCorrectRef.current();
+              }
             }, 800);
           } else if (res.hand_detected) {
             // Mano detectada pero postura incorrecta: Borde rojo reactivo
@@ -102,7 +116,7 @@ export default function CameraPracticeScreen({
       clearInterval(intervalId);
       isEvaluatingRef.current = false;
     };
-  }, [permission?.granted, isCorrect]);
+  }, [permission?.granted, isCorrect, gestureId, letter]);
 
   return (
     <SafeAreaView style={styles.container}>

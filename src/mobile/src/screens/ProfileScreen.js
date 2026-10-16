@@ -12,7 +12,7 @@ export default function ProfileScreen({ onTabChange, progress = { overall: 20, l
       <ScrollView contentContainerStyle={styles.content}>
         {/* Header con Logo */}
         <View style={styles.header}>
-          <FamiGestLogo fontSize={40} />
+          <FamiGestLogo fontSize={42} />
         </View>
 
         {/* Sección de Usuario */}

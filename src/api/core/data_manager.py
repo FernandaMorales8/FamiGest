@@ -12,6 +12,7 @@ class DataManager:
     def __init__(self, data_dir: Optional[Path] = None):
         self.data_dir = data_dir or DATA_DIR
         self.gesture_csv_path = self.data_dir / "gesture_data.csv"
+        self.progress_json_path = self.data_dir / "user_progress.json"
         self._gestures_by_id: Dict[int, Dict[str, Any]] = {}
         self._lessons: List[Dict[str, Any]] = []
         self._load_gestures()
@@ -85,3 +86,48 @@ class DataManager:
             if l["id"] == lesson_id:
                 return l
         return None
+
+    def get_user_progress(self) -> Dict[str, int]:
+        """Obtiene el progreso persistente del usuario desde disco"""
+        default_progress = {"overall": 0, "lesson1": 0, "lesson2": 0, "lesson3": 0}
+        if not self.progress_json_path.exists():
+            return default_progress
+        try:
+            with open(self.progress_json_path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return {
+                    "overall": int(data.get("overall", 0)),
+                    "lesson1": int(data.get("lesson1", 0)),
+                    "lesson2": int(data.get("lesson2", 0)),
+                    "lesson3": int(data.get("lesson3", 0)),
+                }
+        except Exception:
+            return default_progress
+
+    def save_lesson_progress(self, lesson_id: int, score: int) -> Dict[str, int]:
+        """Actualiza el progreso conservando la puntuación más alta (D-04) y lo persiste en disco"""
+        progress = self.get_user_progress()
+        key = f"lesson{lesson_id}"
+        clamped_score = max(0, min(100, int(score)))
+        previous_best = progress.get(key, 0)
+        progress[key] = max(previous_best, clamped_score)
+
+        l1 = progress.get("lesson1", 0)
+        l2 = progress.get("lesson2", 0)
+        l3 = progress.get("lesson3", 0)
+        progress["overall"] = round((l1 + l2 + l3) / 3)
+
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        with open(self.progress_json_path, "w", encoding="utf-8") as f:
+            json.dump(progress, f, indent=2)
+
+        return progress
+
+    def reset_user_progress(self) -> Dict[str, int]:
+        """Reinicia el progreso del usuario a cero en disco"""
+        default_progress = {"overall": 0, "lesson1": 0, "lesson2": 0, "lesson3": 0}
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+        with open(self.progress_json_path, "w", encoding="utf-8") as f:
+            json.dump(default_progress, f, indent=2)
+        return default_progress
+
