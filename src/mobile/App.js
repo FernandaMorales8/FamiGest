@@ -17,8 +17,8 @@ import GoodJobScreen from './src/screens/GoodJobScreen';
 import { calculateMasteryScore } from './src/services/scoring';
 import { getUserProgress, saveUserProgress, resetUserProgress } from './src/services/api';
 
-// Flujo pedagógico para la Lección 1 (Vocales: Señas 'A' y 'E'):
-// Regla: Nunca evaluar una seña sin haberla introducido primero.
+// Flujo pedagógico para la Lección 1 (Vocales en LSM: A, E, I, O, U):
+// Regla (D-03): Nunca evaluar una seña sin haberla introducido primero.
 const LESSON_1_FLOW = [
   // Bloque 1: Vocal A
   { id: 'intro_a', type: 'intro', letter: 'A' },
@@ -28,6 +28,18 @@ const LESSON_1_FLOW = [
   { id: 'intro_e', type: 'intro', letter: 'E' },
   { id: 'mc_e', type: 'multiple_choice', letter: 'E', options: ['A', 'O', 'E', 'U'] },
   { id: 'camera_e', type: 'camera_practice', letter: 'E', gestureId: 2 },
+  // Bloque 3: Vocal I
+  { id: 'intro_i', type: 'intro', letter: 'I' },
+  { id: 'mc_i', type: 'multiple_choice', letter: 'I', options: ['I', 'A', 'U', 'E'] },
+  { id: 'camera_i', type: 'camera_practice', letter: 'I', gestureId: 3 },
+  // Bloque 4: Vocal O
+  { id: 'intro_o', type: 'intro', letter: 'O' },
+  { id: 'mc_o', type: 'multiple_choice', letter: 'O', options: ['U', 'O', 'A', 'I'] },
+  { id: 'camera_o', type: 'camera_practice', letter: 'O', gestureId: 4 },
+  // Bloque 5: Vocal U
+  { id: 'intro_u', type: 'intro', letter: 'U' },
+  { id: 'mc_u', type: 'multiple_choice', letter: 'U', options: ['E', 'I', 'O', 'U'] },
+  { id: 'camera_u', type: 'camera_practice', letter: 'U', gestureId: 5 },
 ];
 
 export default function App() {

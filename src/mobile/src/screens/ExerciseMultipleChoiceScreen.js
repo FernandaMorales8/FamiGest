@@ -8,10 +8,16 @@ import { COLORS, FONTS } from '../theme';
 // Imágenes de referencia locales
 const GESTURE_IMAGE_A = require('../../assets/gestures/1_a.jpg');
 const GESTURE_IMAGE_E = require('../../assets/gestures/2_e.jpg');
+const GESTURE_IMAGE_I = require('../../assets/gestures/3_i.jpg');
+const GESTURE_IMAGE_O = require('../../assets/gestures/4_o.jpg');
+const GESTURE_IMAGE_U = require('../../assets/gestures/5_u.jpg');
 
 const GESTURE_IMAGES = {
   A: GESTURE_IMAGE_A,
   E: GESTURE_IMAGE_E,
+  I: GESTURE_IMAGE_I,
+  O: GESTURE_IMAGE_O,
+  U: GESTURE_IMAGE_U,
 };
 
 // Subcomponente para cada botón de opción: gestiona su propia animación y estado de error independientemente
