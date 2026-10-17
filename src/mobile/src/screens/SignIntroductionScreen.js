@@ -7,20 +7,32 @@ import { COLORS, FONTS } from '../theme';
 
 const GESTURE_IMAGE_A = require('../../assets/gestures/1_a.jpg');
 const GESTURE_IMAGE_E = require('../../assets/gestures/2_e.jpg');
+const GESTURE_IMAGE_I = require('../../assets/gestures/3_i.jpg');
+const GESTURE_IMAGE_O = require('../../assets/gestures/4_o.jpg');
+const GESTURE_IMAGE_U = require('../../assets/gestures/5_u.jpg');
 
 const GESTURE_IMAGES = {
   A: GESTURE_IMAGE_A,
   E: GESTURE_IMAGE_E,
+  I: GESTURE_IMAGE_I,
+  O: GESTURE_IMAGE_O,
+  U: GESTURE_IMAGE_U,
 };
 
 const DEFAULT_DESCRIPTIONS = {
   A: 'Cierra la mano formando un puño relajado y apoya el pulgar contra el lateral exterior del dedo índice. La palma debe orientarse hacia el frente.',
   E: 'Dobla los cuatro dedos hacia adentro como una garra suave, apoyando las yemas de los dedos sobre la base de la palma o el pulgar, con la palma mirando hacia el frente.',
+  I: 'Cierra el puño manteniendo únicamente el dedo meñique completamente extendido hacia arriba y el pulgar sujetando los demás dedos.',
+  O: 'Curva todos los dedos de la mano hasta que sus yemas se unan con la punta del pulgar, formando un círculo claro con el contorno de la mano.',
+  U: 'Extiende completamente los dedos índice y medio juntos apuntando hacia arriba, mientras el anular y el meñique permanecen doblados sujetos por el pulgar.',
 };
 
 const DEFAULT_TIPS = {
   A: 'Asegúrate de que la cámara distinga la posición de tu pulgar y tus nudillos.',
   E: 'Mantén los dedos flexionados juntos y la palma orientada de frente a la cámara.',
+  I: 'Mantén el dedo meñique recto hacia arriba y evita levantar el anular.',
+  O: 'Orienta ligeramente tu mano de perfil o diagonal para que se aprecie el círculo de la letra O.',
+  U: 'Mantén los dedos índice y medio bien pegados entre sí apuntando hacia arriba.',
 };
 
 export default function SignIntroductionScreen({
