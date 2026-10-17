@@ -17,30 +17,119 @@ import GoodJobScreen from './src/screens/GoodJobScreen';
 import { calculateMasteryScore } from './src/services/scoring';
 import { getUserProgress, saveUserProgress, resetUserProgress } from './src/services/api';
 
-// Flujo pedagógico para la Lección 1 (Vocales en LSM: A, E, I, O, U):
-// Regla (D-03): Nunca evaluar una seña sin haberla introducido primero.
-const LESSON_1_FLOW = [
-  // Bloque 1: Vocal A
-  { id: 'intro_a', type: 'intro', letter: 'A' },
-  { id: 'mc_a', type: 'multiple_choice', letter: 'A', options: ['E', 'I', 'O', 'A'] },
-  { id: 'camera_a', type: 'camera_practice', letter: 'A', gestureId: 1 },
-  // Bloque 2: Vocal E
-  { id: 'intro_e', type: 'intro', letter: 'E' },
-  { id: 'mc_e', type: 'multiple_choice', letter: 'E', options: ['A', 'O', 'E', 'U'] },
-  { id: 'camera_e', type: 'camera_practice', letter: 'E', gestureId: 2 },
-  // Bloque 3: Vocal I
-  { id: 'intro_i', type: 'intro', letter: 'I' },
-  { id: 'mc_i', type: 'multiple_choice', letter: 'I', options: ['I', 'A', 'U', 'E'] },
-  { id: 'camera_i', type: 'camera_practice', letter: 'I', gestureId: 3 },
-  // Bloque 4: Vocal O
-  { id: 'intro_o', type: 'intro', letter: 'O' },
-  { id: 'mc_o', type: 'multiple_choice', letter: 'O', options: ['U', 'O', 'A', 'I'] },
-  { id: 'camera_o', type: 'camera_practice', letter: 'O', gestureId: 4 },
-  // Bloque 5: Vocal U
-  { id: 'intro_u', type: 'intro', letter: 'U' },
-  { id: 'mc_u', type: 'multiple_choice', letter: 'U', options: ['E', 'I', 'O', 'U'] },
-  { id: 'camera_u', type: 'camera_practice', letter: 'U', gestureId: 5 },
+// Definición base de las 5 vocales de la Lección 1 (LSM: A, E, I, O, U)
+const VOWEL_MODULES = [
+  { letter: 'A', gestureId: 1 },
+  { letter: 'E', gestureId: 2 },
+  { letter: 'I', gestureId: 3 },
+  { letter: 'O', gestureId: 4 },
+  { letter: 'U', gestureId: 5 },
 ];
+
+const ALL_VOWEL_LETTERS = VOWEL_MODULES.map((v) => v.letter);
+
+// Función auxiliar Fisher-Yates para mezclar arreglos de forma uniforme e inmutable
+function shuffleArray(array) {
+  const copy = [...array];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+// Genera 4 opciones aleatorias para opción múltiple garantizando incluir la letra correcta
+function buildRandomOptions(targetLetter) {
+  const distractors = shuffleArray(
+    ALL_VOWEL_LETTERS.filter((l) => l !== targetLetter)
+  ).slice(0, 3);
+  return shuffleArray([targetLetter, ...distractors]);
+}
+
+/**
+ * Construye una cola verdaderamente aleatoria con restricción de precedencia (Topological Random Walk),
+ * respetando la regla D-03 (nunca evaluar una letra que no haya sido introducida antes):
+ * - El orden de las 5 vocales es aleatorio.
+ * - Al introducir una vocal, sus 2 ejercicios (opción múltiple y cámara) entran a la bolsa general (unlockedPool).
+ * - En cada paso se sortea libremente si presentar una nueva vocal o lanzar cualquier ejercicio desbloqueado,
+ *   evitando repetir la misma letra en pasos consecutivos siempre que haya alternativas.
+ */
+function buildRandomizedLessonFlow() {
+  const unintroduced = shuffleArray(VOWEL_MODULES);
+  const unlockedPool = [];
+  const queue = [];
+
+  // Función auxiliar para introducir la siguiente vocal pendiente y desbloquear sus 2 ejercicios
+  const introduceNextVowel = () => {
+    const vowel = unintroduced.shift();
+    const lower = vowel.letter.toLowerCase();
+
+    queue.push({
+      id: `intro_${lower}`,
+      type: 'intro',
+      letter: vowel.letter,
+      skipAttempts: 0,
+    });
+
+    unlockedPool.push(
+      {
+        id: `mc_${lower}`,
+        type: 'multiple_choice',
+        letter: vowel.letter,
+        options: buildRandomOptions(vowel.letter),
+        skipAttempts: 0,
+      },
+      {
+        id: `camera_${lower}`,
+        type: 'camera_practice',
+        letter: vowel.letter,
+        gestureId: vowel.gestureId,
+        skipAttempts: 0,
+      }
+    );
+  };
+
+  // Paso inicial: introducir las primeras 2 vocales al inicio (o 1 y luego sortear)
+  // para que desde el primer ejercicio ya exista incertidumbre real entre distintas letras
+  introduceNextVowel();
+  if (Math.random() < 0.7) {
+    introduceNextVowel();
+  }
+
+  // Sorteo paso a paso hasta vaciar tanto las vocales por introducir como los ejercicios desbloqueados
+  while (unintroduced.length > 0 || unlockedPool.length > 0) {
+    const lastItem = queue[queue.length - 1];
+
+    // Decidir si en este turno introducimos una nueva vocal o sacamos un ejercicio de la bolsa
+    // Si la bolsa está vacía, obligatoriamente introducimos una vocal nueva.
+    const shouldIntroduceNew =
+      unlockedPool.length === 0 ||
+      (unintroduced.length > 0 &&
+        lastItem.type !== 'intro' &&
+        Math.random() < 0.42);
+
+    if (shouldIntroduceNew) {
+      introduceNextVowel();
+    } else {
+      // Buscar preferentemente un ejercicio cuya letra sea distinta a la del paso inmediatamente anterior
+      const differentLetterCandidates = unlockedPool.filter(
+        (ex) => ex.letter !== lastItem.letter
+      );
+      const candidateList =
+        differentLetterCandidates.length > 0
+          ? differentLetterCandidates
+          : unlockedPool;
+
+      const chosenEx =
+        candidateList[Math.floor(Math.random() * candidateList.length)];
+      const poolIndex = unlockedPool.findIndex((ex) => ex.id === chosenEx.id);
+      unlockedPool.splice(poolIndex, 1);
+      queue.push(chosenEx);
+    }
+  }
+
+  return queue;
+}
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -88,10 +177,10 @@ export default function App() {
     else setCurrentScreen('lessons');
   };
 
-  // Iniciar lección: configura la cola de ejercicios e introduce la seña
+  // Iniciar lección: construye una cola aleatoria respetando precedencia pedagógica (D-03)
   const handleStartLesson = (lessonId) => {
     setActiveLessonId(lessonId);
-    setSessionQueue(LESSON_1_FLOW.map((item) => ({ ...item, skipAttempts: 0 })));
+    setSessionQueue(buildRandomizedLessonFlow());
     setSessionIndex(0);
     setSkippedQueue([]);
     setErrorsCount(0);
@@ -107,8 +196,10 @@ export default function App() {
 
   // Concluir lección: calcula maestría, guarda progreso y muestra pantalla de carga
   const finalizeLesson = (finalFailedCount = failedExercisesCount) => {
+    const totalEvaluableCount =
+      sessionQueue.filter((ex) => ex.type !== 'intro').length || 10;
     const finalScore = calculateMasteryScore({
-      totalEvaluable: 4, // 2 de opción múltiple ('A', 'E') + 2 de cámara ('A', 'E')
+      totalEvaluable: totalEvaluableCount, // 5 de opción múltiple + 5 de cámara (A, E, I, O, U)
       errorsCount,
       skipsCount,
       failedExercisesCount: finalFailedCount,
