@@ -1,6 +1,6 @@
-# Evidencia Técnica y de Diseño UI/UX — FamiGest (Sprint II)
+# Evidencia Técnica, de Diseño UI/UX y Consolidación — FamiGest (Sprints II y III)
 
-Esta carpeta concentra la evidencia visual y técnica que respalda las actividades ejecutadas durante el **Sprint II (`sprint-2-review-v1.0`)**.
+Esta carpeta concentra la evidencia visual, técnica, funcional y ejecutiva que respalda las actividades ejecutadas y consolidadas durante el **Sprint II (`sprint-2-review-v1.0`)** y el **Sprint III (`sprint-3-consolidation-v1.0`)**.
 
 ---
 
@@ -56,3 +56,13 @@ En cumplimiento de la decisión **`D-06`** y como mitigación del riesgo **`R-06
 | [`11_Lessons_Menu_Completed_Star.jpeg`](./mobile-testing/11_Lessons_Menu_Completed_Star.jpeg) | Menú de Lecciones actualizado con estrella dorada (`★`) en la Lección 1 | `WBS 4.3` | Issue `#23` / PR `#24` |
 | [`12_User_Profile_Updated_Progress.jpeg`](./mobile-testing/12_User_Profile_Updated_Progress.jpeg) | Pantalla de Perfil reflejando el progreso persistido tras finalizar la lección | `WBS 4.3` | Issue `#23` / PR `#24` |
 | [`13_Mobile_App_Live_Execution_Demo_v1.0.mp4`](./mobile-testing/13_Mobile_App_Live_Execution_Demo_v1.0.mp4) | Video demostrativo de la ejecución completa en tiempo real en dispositivo físico | `WBS 2.1 – 4.5` | Todos los incrementos del Sprint II (`#17`–`#28`) |
+
+---
+
+## 4. Presentación de Consolidación y Transferencia (`project-management/evidence/presentation/`)
+
+Como parte del cierre del *Laboratorio Abierto: Construcción* (**Hito 5 — `WBS 5.3`: Elaboración del paquete de entrega / *Handover Package***), se integra la presentación  para exposición ante el comité evaluador:
+
+| Archivo en `/evidence/presentation/` | Descripción del Entregable | Tarea WBS Relacionada | Incremento Relacionado |
+| :--- | :--- | :--- | :--- |
+| [`FamiGest_Lab_Presentation.pdf`](./presentation/FamiGest_Lab_Presentation.pdf) | Presentación ejecutiva de consolidación: evolución técnica, arquitectura cliente-servidor, demostración en hardware real y paquete de transferencia (*Handover Package*) al *Laboratorio Abierto: Pruebas* | `WBS 5.3` | Issue `#37` / PR `#38` |
