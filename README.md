@@ -22,7 +22,7 @@ Desarrollar un prototipo funcional de una aplicación móvil que permita a famil
 * **Área:** Desarrollo de software / Inteligencia artificial aplicada / Visión por computadora  
 * **Laboratorio:** Laboratorio Abierto: Construcción (CUCEI - Universidad de Guadalajara)  
 * **Profesor Responsable:** Dr. Jairo Cain Sánchez Estrada  
-* **Mentor (Project Sponsor):** José Juan Meza Espinosa  
+* **Asesor:** José Juan Meza Espinosa  
 * **Project Leader:** María Fernanda Morales Ríos  
 * **Integrantes del Equipo:** María Fernanda Morales Ríos  
 
@@ -30,15 +30,15 @@ Desarrollar un prototipo funcional de una aplicación móvil que permita a famil
 
 ## Estado actual
 
-* **Sprint actual:** Sprint II — Seguimiento, evaluación intermedia y adaptación  
-* **Versión actual:** `sprint-2-review-v1.0`  
+* **Sprint actual:** Sprint III — Informe de consolidación y estado de la solución (Cierre de Construcción)  
+* **Versión actual:** `sprint-3-consolidation-v1.0`  
 
-### Avance acumulado al cierre del Sprint II:
+### Avance consolidado al cierre del Laboratorio Abierto: Construcción:
 * **Hito 1 (`WBS 1.1 – 1.4` — Planificación y Gestión):** 100% Completado (`sprint-1-plan-baseline-v1.0`).
 * **Hito 2 (`WBS 2.1 – 2.4` — Interfaz Móvil y Navegación):** 100% Completado (Diseño UI/UX de alta fidelidad en **Figma** e implementación en React Native / Expo con navegación de 3 pestañas, Lección 1 completa con las 5 vocales `A, E, I, O, U` en alta definición, flujo aleatorio con restricción de precedencia `D-03` y cola de reintentos `D-04`).
 * **Hito 3 (`WBS 3.1 – 3.4` — Visión por Computadora y Clasificador):** 100% Completado (Extracción de 21 landmarks 3D con MediaPipe, normalización geométrica invariante a traslación y escala, clasificador KNN por similitud coseno y dataset `data/gestures_data.json`).
 * **Hito 4 (`WBS 4.1 – 4.5` — API REST e Integración Remota):** 100% Completado (Servidor FastAPI con evaluación de fotogramas Base64 en tiempo real, persistencia de progreso en `data/user_progress.json` y suite de 9 pruebas automatizadas aprobadas).
-* **Hito 5 (`WBS 5.1 – 5.3` — Validación Piloto y Handover):** Programado para el Sprint III.
+* **Hito 5 (`WBS 5.1 – 5.3` — Validación, Optimización y Transferencia):** Paquete de transferencia (`WBS 5.3` — *Handover Package*, informe de consolidación `Sprint_III_Consolidation_Report_v1.0.pdf/.md` y presentación ejecutiva `FamiGest_Lab_Presentation.pdf`) 100% completado; ejecución de prueba piloto con usuarios externos (`WBS 5.1`) y optimizaciones derivadas (`WBS 5.2`) transferidas formalmente al *Laboratorio Abierto: Pruebas* (`D-07`).
 
 ---
 
@@ -46,29 +46,33 @@ Desarrollar un prototipo funcional de una aplicación móvil que permita a famil
 
 ```text
 FamiGest/
-├── README.md                                  # Descripción general, estado actual e instrucciones
-├── requirements.txt                           # Dependencias del servidor Backend y Visión Artificial
-├── design-baseline/                           # Línea base de diseño recibida (design-baseline-v1.0)
-├── project-management/                        # Documentos formales de gestión, evidencia y seguimiento
-│   ├── Sprint_II_Progress_Review_v1.0.md      # Entregable principal de seguimiento del Sprint II
-│   ├── charter/                               # Project_Charter_v1.0.pdf y SMART_Goals_v1.0.pdf
-│   ├── wbs/                                   # WBS_v1.0.xlsx y WBS_v1.1.xlsx
-│   ├── raci/                                  # RACI_v1.0.xlsx
-│   ├── risks/                                 # RiskRegister_v1.0.xlsx y RiskRegister_v1.1.xlsx
-│   ├── schedule/                              # Gantt_Schedule_v1.0.xlsx y Gantt_Schedule_v1.1.xlsx
-│   ├── decisions/                             # Decision_Log.xlsx (Decisiones D-01 a D-06)
-│   ├── docs/technical/                        # Especificación técnica (Architecture_and_API_Specification_v1.0.md)
-│   └── evidence/                              # Evidencia visual y funcional del proyecto
-│       ├── README.md                          # Índice de evidencias y trazabilidad con la WBS
-│       ├── figma-mockups/                     # 9 Mockups PNG y video demo en Figma (WBS 2.1-2.4)
-│       └── mobile-testing/                    # 12 Capturas y video demo en dispositivo móvil físico
-├── data/                                      # Base de datos de vectores de señas (gestures_data.json)
-├── src/                                       # Código fuente del sistema integrado
-│   ├── api/                                   # Servidor Backend FastAPI + MediaPipe + Clasificador
-│   └── mobile/                                # Aplicación móvil en React Native (Expo)
-└── tests/                                     # Pruebas automatizadas y reportes de verificación
-    ├── test_api_endpoints.py                  # Suite de 9 pruebas unitarias y de integración
-    └── Test_Report_v1.0.pdf                   # Reporte de resultados de pruebas del Sprint II
+├── README.md                                        # Descripción general, estado actual e instrucciones
+├── requirements.txt                                 # Dependencias del servidor Backend y Visión Artificial
+├── design-baseline/                                 # Línea base de diseño recibida (design-baseline-v1.0)
+├── project-management/                              # Documentos formales de gestión, evidencia y seguimiento
+│   ├── Sprint_II_Progress_Review_v1.0.md            # Entregable de seguimiento intermedio (Sprint II)
+│   ├── Sprint_III_Consolidation_Report_v1.0.md      # Informe de consolidación y Handover Package (Sprint III)
+│   ├── Sprint_III_Consolidation_Report_v1.0.pdf     # Versión formal en PDF del informe de consolidación (Sprint III)
+│   ├── charter/                                     # Project_Charter_v1.0.pdf y SMART_Goals_v1.0.pdf
+│   ├── wbs/                                         # WBS_v1.0.xlsx, WBS_v1.1.xlsx y WBS_v1.2.xlsx
+│   ├── raci/                                        # RACI_v1.0.xlsx
+│   ├── risks/                                       # RiskRegister_v1.0.xlsx, v1.1.xlsx y v1.2.xlsx
+│   ├── schedule/                                    # Gantt_Schedule_v1.0.xlsx, v1.1.xlsx y v1.2.xlsx
+│   ├── decisions/                                   # Decision_Log.xlsx (Decisiones D-01 a D-07)
+│   ├── docs/technical/                              # Especificación técnica (Architecture_and_API_Specification_v1.0.md)
+│   └── evidence/                                    # Evidencia visual, funcional y ejecutiva del proyecto
+│       ├── README.md                                # Índice de evidencias y trazabilidad con la WBS
+│       ├── figma-mockups/                           # 9 Mockups PNG y video demo en Figma (WBS 2.1-2.4)
+│       ├── mobile-testing/                          # 12 Capturas y video demo en dispositivo móvil físico
+│       └── presentation/                            # Presentación ejecutiva de cierre (FamiGest_Lab_Presentation.pdf)
+├── data/                                            # Base de datos de vectores de señas (gestures_data.json)
+├── src/                                             # Código fuente del sistema integrado
+│   ├── api/                                         # Servidor Backend FastAPI + MediaPipe + Clasificador
+│   └── mobile/                                      # Aplicación móvil en React Native (Expo)
+└── tests/                                           # Pruebas automatizadas y reportes de verificación
+    ├── test_api_endpoints.py                        # Suite de 9 pruebas unitarias y de integración
+    ├── test_vision_core.py                          # Pruebas unitarias del núcleo de visión computacional
+    └── Test_Report_v1.0.pdf                         # Reporte de resultados de pruebas del Sprint II
 ```
 
 ---
