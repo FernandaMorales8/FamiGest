@@ -2,13 +2,12 @@
 
 * **Proyecto:** FamiGest — Aplicación móvil interactiva para el aprendizaje inicial de la Lengua de Señas Mexicana (LSM)
 * **Institución:** Universidad de Guadalajara — Centro Universitario de Ciencias Exactas e Ingenierías (CUCEI)
-* **Programa Educativo:** Ingeniería en Computación (Malla ICOM)
-* **Curso:** Laboratorio Abierto: Construcción (Ciclo Escolar 2026)
-* **Profesor Responsable:** Dr. Jairo Cain Sánchez Estrada
-* **Mentor (Project Sponsor):** José Juan Meza Espinosa
+* **Carrera:** Ingeniería en Computación
+* **Materia:** Laboratorio Abierto: Construcción
+* **Profesor:** Dr. Jairo Cain Sánchez Estrada
+* **Asesor:** José Juan Meza Espinosa
 * **Project Leader:** María Fernanda Morales Ríos
-* **Versión del Entregable:** `sprint-3-consolidation-v1.0`
-* **Fecha de Corte:** 8 de noviembre de 2026
+* **Folio del Equipo:** A012-26A
 
 ---
 
@@ -50,7 +49,7 @@ El proyecto se estructuró originalmente bajo una Estructura de Desglose del Tra
 
 ## 3. Bitácora de Decisiones Técnicas y de Arquitectura
 
-Durante el proceso se formalizaron 6 decisiones arquitectónicas críticas registradas en la bitácora `Decision_Log.xlsx`, alineadas con la resolución de riesgos identificados:
+Durante el proceso se formalizaron 7 decisiones arquitectónicas críticas registradas en la bitácora `Decision_Log.xlsx`, alineadas con la resolución de riesgos identificados:
 
 * **Decisión D-01 (Arquitectura Basada en API Remota):**
   * **Decisión:** Trasladar la carga computacional pesada (red neuronal MediaPipe y clasificador) a un servicio backend remoto en Python, dejando en el dispositivo móvil únicamente la captura y renderizado visual.

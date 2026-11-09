@@ -1,6 +1,6 @@
 # Evidencia Técnica, de Diseño UI/UX y Consolidación — FamiGest (Sprints II y III)
 
-Esta carpeta concentra la evidencia visual, técnica, funcional y ejecutiva que respalda las actividades ejecutadas y consolidadas durante el **Sprint II (`sprint-2-review-v1.0`)** y el **Sprint III (`sprint-3-consolidation-v1.0`)**.
+Esta carpeta concentra la evidencia visual, técnica, funcional y ejecutiva que respalda las actividades ejecutadas y consolidadas durante el **Sprint II (`sprint-2-review-v1.0`)** y el **Sprint III (`construction-handover-v1.0`)**.
 
 ---
 

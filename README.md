@@ -31,7 +31,7 @@ Desarrollar un prototipo funcional de una aplicación móvil que permita a famil
 ## Estado actual
 
 * **Sprint actual:** Sprint III — Informe de consolidación y estado de la solución (Cierre de Construcción)  
-* **Versión actual:** `sprint-3-consolidation-v1.0`  
+* **Versión actual:** `construction-handover-v1.0`  
 
 ### Avance consolidado al cierre del Laboratorio Abierto: Construcción:
 * **Hito 1 (`WBS 1.1 – 1.4` — Planificación y Gestión):** 100% Completado (`sprint-1-plan-baseline-v1.0`).
